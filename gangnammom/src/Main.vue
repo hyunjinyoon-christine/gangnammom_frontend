@@ -1,16 +1,19 @@
 <template>
   <div id="main" class="container">
     <div class="main_list">
-        <div class="main_item"  v-for="post in posts" :key="post.id">
-            <div class="contents">
-                <div class="thumbnail">
-                    <img v-bind:src="getThumbnail()"/>
-                </div>
-                <p>{{post.title}}</p>
-                <p>{{post.body}}</p>
-                <p>{{post.userId}}</p>
-            </div>            
-        </div>
+            <div class="main_item">
+                <div class="contents" v-for="post in posts" :key="post.id">
+                  <div class="card">
+                                       <div class="thumbnail">
+                        <img v-bind:src="getThumbnail()"/>
+                    </div>
+                    <p>{{post.title}}</p>
+                    <p>{{post.body}}</p>
+                    <p>{{post.userId}}</p>
+                  </div>
+
+                </div>            
+            </div>        
     </div>
   </div>
 </template>
@@ -57,17 +60,20 @@ export default {
     .container{
         max-width: 1040px;
     }
-    .main_list {
+    .contents {
+        flex: 0 0 25%;
+        max-width: 25%;
+        padding: 1rem 0.5rem;
+    }
+    .card {
+        background-color: $gray-300;
+        padding: 1rem;
+        border-radius: .5rem; 
+    }
+    .main_item {
         display: flex;
         justify-content: center;
         flex-wrap: wrap;
-    }
-    .main_item {
-        background-color: $gray-300;
-        padding: 1rem;
-        flex: 0 0 25%;
-        max-width: 25%;
-        border-radius: .5rem;
     }
     
 }
