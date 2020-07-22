@@ -1,8 +1,8 @@
 <template>
   <div id="main" class="container">
     <div class="main_list">
-        <div class="main_item">
-            <div class="contents" v-for="post in posts" :key="post.id">
+        <div class="main_item"  v-for="post in posts" :key="post.id">
+            <div class="contents">
                 <div class="thumbnail">
                     <img v-bind:src="getThumbnail()"/>
                 </div>
@@ -42,7 +42,9 @@ export default {
       console.log(this.posts)
     },
     getThumbnail() {
-      Math.random(this.thumbnails);
+        let num = Math.floor(Math.random() * 3);
+        console.log(num)
+        return this.thumbnails[num]
     }
 
   }
