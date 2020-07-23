@@ -1,8 +1,8 @@
 <template>
   <div id="main" class="container">
     <div class="area_select">
-      <label for="cars">포스트 개수</label>
-        <select v-model="postNumber">
+      <label for="postNumber">포스트 개수</label>
+        <select v-model="question">
           <option v-for="option in options" :value="option.value" :key="option.value">
             {{ option.text }}
           </option>
@@ -48,12 +48,22 @@ export default {
       options: [
         { text: '8', value: 8 },
         { text: '16', value: 16 },
-      ]
+      ],
+      question: '',
       
     }
   },
-  mounted () {
-    // this.requestEvents()
+  watch: {    
+    question: function (newVal) {      
+      if(newVal > this.postNumber){
+        this.postNumber = 8
+        this.requestEvents()
+        this.postNumber = newVal
+      } else if(newVal < this.postNumber){
+        this.posts = this.posts.slice(0,8)
+        this.postNumber = newVal
+      } 
+    }
   },
   methods: {
     requestEvents: async function() {
@@ -66,15 +76,14 @@ export default {
 
       if(tempStorage.data.length >= this.postNumber ){
         this.busy = false 
-      }
-     
+      }     
     },
     getThumbnail() {
         let num = Math.floor(Math.random() * 3);
         return this.thumbnails[num]
     },
     loadMore: function () {
-      this.busy = true // 무한 스크롤 기능 비활성화
+      this.busy = true
       this.requestEvents()
     },
 
