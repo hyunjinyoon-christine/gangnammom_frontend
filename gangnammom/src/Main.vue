@@ -1,31 +1,38 @@
 <template>
   <div id="main" class="container">
-    <div class="main_list"
-    v-infinite-scroll="loadMore" 
-       infinite-scroll-disabled="busy" 
-       infinite-scroll-distance="10">
-            <div class="main_item">
-                <div class="contents" v-for="post in posts" :key="post.id">
-                  <div class="card">
-                                       <div class="thumbnail">
-                        <img v-bind:src="getThumbnail()"/>
-                    </div>
-                    <p>{{post.title}}</p>
-                    <p>{{post.body}}</p>
-                    <p>{{post.userId}}</p>
-                  </div>
-
-                </div>            
-            </div>        
+    <div class="area_select">
+      <label for="cars">포스트 개수</label>
+        <select v-model="postNumber">
+          <option v-for="option in options" :value="option.value" :key="option.value">
+            {{ option.text }}
+          </option>
+        </select>
     </div>
+    <div class="main_list">
+      <div class="main_item"
+      v-infinite-scroll="loadMore" 
+      infinite-scroll-disabled="busy" 
+      infinite-scroll-distance="10">
+          <div class="contents" v-for="post in posts" :key="post.id">
+            <div class="card">
+              <div class="thumbnail">
+                <img v-bind:src="getThumbnail()"/>
+              </div>
+              <p>{{post.title}}</p>
+              <p>{{post.body}}</p>
+              <p>{{post.userId}}</p>
+            </div>
+          </div>
+      </div>
+    </div>
+    
   </div>
 </template>
 
 <script>
 export default {
-  name: 'Main',
-  components: {
-
+  name: 'Main',  
+  components: {       
   },
   data (){
     return {
@@ -37,19 +44,28 @@ export default {
       posts:[],
       busy: false,
       eventUpdateCount: 0,
-      tempStorage: []
+      postNumber:8,
+      options: [
+        { text: '8', value: 8 },
+        { text: '16', value: 16 },
+      ]
+      
     }
   },
   mounted () {
-    this.requestEvents()   
+    // this.requestEvents()
   },
   methods: {
     requestEvents: async function() {
-      this.eventUpdateCount += 1      
-      this.tempStorage = await this.$http.get('https://jsonplaceholder.typicode.com/posts?_page='+ this.eventUpdateCount +'&_limit=8&_sort=id&_order=desc')
-      console.log(this.tempStorage)
-      for (let data of this.tempStorage.data) {        
+      this.eventUpdateCount += 1
+      let tempStorage = []
+      tempStorage = await this.$http.get('https://jsonplaceholder.typicode.com/posts?_page='+ this.eventUpdateCount +'&_limit='+this.postNumber+'&_sort=id&_order=desc')
+      for (let data of tempStorage.data) {        
         this.posts.push(data)        
+      }
+
+      if(tempStorage.data.length >= this.postNumber ){
+        this.busy = false 
       }
      
     },
@@ -57,10 +73,10 @@ export default {
         let num = Math.floor(Math.random() * 3);
         return this.thumbnails[num]
     },
-    // loadMore: function () {
-    //   this.busy = true // 무한 스크롤 기능 비활성화
-    //   this.requestEvents()
-    // },
+    loadMore: function () {
+      this.busy = true // 무한 스크롤 기능 비활성화
+      this.requestEvents()
+    },
 
   }
 }
@@ -86,6 +102,10 @@ export default {
         display: flex;
         justify-content: center;
         flex-wrap: wrap;
+    }
+    .area_select{
+      display: flex;
+      justify-content: flex-end;
     }
     
 }
