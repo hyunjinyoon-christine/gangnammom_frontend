@@ -1,6 +1,9 @@
 <template>
   <div id="main" class="container">
-    <div class="main_list">
+    <div class="main_list"
+    v-infinite-scroll="loadMore" 
+       infinite-scroll-disabled="busy" 
+       infinite-scroll-distance="10">
             <div class="main_item">
                 <div class="contents" v-for="post in posts" :key="post.id">
                   <div class="card">
@@ -32,7 +35,9 @@ export default {
         'https://via.placeholder.com/150/56a8c0'
       ],
       posts:[],
-      maxCount:8
+      busy: false,
+      eventUpdateCount: 0,
+      tempStorage: []
     }
   },
   mounted () {
@@ -40,15 +45,22 @@ export default {
   },
   methods: {
     requestEvents: async function() {
-      this.posts = await this.$http.get('https://jsonplaceholder.typicode.com/posts')
-      this.posts = this.posts.data
-      console.log(this.posts)
+      this.eventUpdateCount += 1      
+      this.tempStorage = await this.$http.get('https://jsonplaceholder.typicode.com/posts?_page='+ this.eventUpdateCount +'&_limit=8&_sort=id&_order=desc')
+      console.log(this.tempStorage)
+      for (let data of this.tempStorage.data) {        
+        this.posts.push(data)        
+      }
+     
     },
     getThumbnail() {
         let num = Math.floor(Math.random() * 3);
-        console.log(num)
         return this.thumbnails[num]
-    }
+    },
+    // loadMore: function () {
+    //   this.busy = true // 무한 스크롤 기능 비활성화
+    //   this.requestEvents()
+    // },
 
   }
 }
