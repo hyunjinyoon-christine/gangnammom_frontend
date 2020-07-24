@@ -2,7 +2,7 @@
   <div id="main" class="container">
     <div class="area_select">
       <label for="postNumber">포스트 개수</label>
-        <select v-model="question">
+        <select v-model="selected">
           <option v-for="option in options" :value="option.value" :key="option.value">
             {{ option.text }}
           </option>
@@ -16,7 +16,7 @@
           <div class="contents" v-for="post in posts" :key="post.id">
             <div class="card">
               <div class="thumbnail">
-                <img v-bind:src="getThumbnail()"/>
+                <img v-bind:src="post.thumbnail"/>
               </div>
               <p>{{post.title}}</p>
               <p>{{post.body}}</p>
@@ -49,7 +49,8 @@ export default {
         { text: '8', value: 8 },
         { text: '16', value: 16 },
       ],
-      question: '',
+      selected: '8',
+      thumbnail:''
       
     }
   },
@@ -70,8 +71,12 @@ export default {
       this.eventUpdateCount += 1
       let tempStorage = []
       tempStorage = await this.$http.get('https://jsonplaceholder.typicode.com/posts?_page='+ this.eventUpdateCount +'&_limit='+this.postNumber+'&_sort=id&_order=desc')
+      for(let i = 0; i < tempStorage.data.length; i++){
+        console.log(tempStorage.data,'냐냐')
+        tempStorage.data[i].thumbnail = this.getThumbnail()
+      }
       for (let data of tempStorage.data) {        
-        this.posts.push(data)        
+        this.posts.push(data)
       }
 
       if(tempStorage.data.length >= this.postNumber ){
@@ -79,8 +84,9 @@ export default {
       }     
     },
     getThumbnail() {
-        let num = Math.floor(Math.random() * 3);
-        return this.thumbnails[num]
+      let num = Math.floor(Math.random() * 3);
+      console.log(this.thumbnails[num],'냐냐0')
+      return this.thumbnails[num]
     },
     loadMore: function () {
       this.busy = true
