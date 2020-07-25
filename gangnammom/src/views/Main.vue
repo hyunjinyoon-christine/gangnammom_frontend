@@ -113,7 +113,6 @@ export default {
         padding: 1rem 0.5rem;
     }
     .card {
-        background-color: $gray-300;
         padding: 1rem;
         border-radius: .5rem; 
     }
@@ -128,4 +127,6 @@ export default {
     }
     
 }
+
+
 </style>

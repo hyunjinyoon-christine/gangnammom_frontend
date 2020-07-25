@@ -5,6 +5,7 @@ import axios from 'axios'
 let infiniteScroll = require('vue-infinite-scroll');
 import router from './router'
 import Router from 'vue-router'
+import Meta from 'vue-meta';
 
 
 
@@ -17,6 +18,8 @@ Vue.config.productionTip = false
 Vue.prototype.$http = axios
 Vue.use(infiniteScroll)
 Vue.use(Router)
+Vue.use(Meta)
+
 
 const store = () => new Vuex.Store({
   state: {

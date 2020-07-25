@@ -26,6 +26,18 @@
 <script>
 
 export default {
+  metaInfo() {
+    return  {
+      title: this.$store.state.post.title,      
+      meta: [
+        { charset: 'utf-8'},
+        { name: 'description', 
+        content: this.$store.state.post.body, 
+        vmid: 'description'},
+      ]
+    }
+  },
+  
   name: 'Detail',
   components: {
   },
