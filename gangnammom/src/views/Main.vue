@@ -71,14 +71,13 @@ export default {
   },
   methods: {
     requestEvents: async function() {
-      this.eventUpdateCount += 1
-      let tempStorage = []
-      tempStorage = await this.$http.get('https://jsonplaceholder.typicode.com/posts?_page='+ this.eventUpdateCount +'&_limit='+this.postNumber+'&_sort=id&_order=desc')
-      for(let i = 0; i < tempStorage.data.length; i++){
-        console.log(tempStorage.data,'냐냐')
-        tempStorage.data[i].thumbnail = this.getThumbnail()
-      }
+      this.eventUpdateCount += 1      
+      let tempStorage = await this.$http.get('https://jsonplaceholder.typicode.com/posts?_page='+ this.eventUpdateCount +'&_limit='+this.postNumber+'&_sort=id&_order=desc')
+      // for(let i = 0; i < tempStorage.data.length; i++){
+      //   tempStorage.data[i].thumbnail = this.getThumbnail()
+      // }
       for (let data of tempStorage.data) {        
+        data.thumbnail = this.getThumbnail()
         this.posts.push(data)
       }
 
@@ -88,7 +87,6 @@ export default {
     },
     getThumbnail() {
       let num = Math.floor(Math.random() * 3);
-      console.log(this.thumbnails[num],'냐냐0')
       return this.thumbnails[num]
     },
     loadMore: function () {

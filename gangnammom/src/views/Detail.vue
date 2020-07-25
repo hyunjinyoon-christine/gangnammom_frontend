@@ -1,22 +1,24 @@
 <template>
-  <div id="detail">
-    <div>
-        제목 {{$store.state.post.title}}
+  <div id="detail" class="container">
+    <div class="title">
+        <h1>제목: {{$store.state.post.title}}</h1>
     </div>
     <div>
-        내용 {{$store.state.post.body}}
+        <p>{{$store.state.post.body}}</p>
     </div>
     <div class="commentArea">
-        댓글
-        <div>
-            제목 {{commentTitle}}
-        </div>
-        <div>
-            작성자 이메일 {{email}}
-        </div>
-        <div>
-            내용 {{commentDescription}}
-        </div>
+        <h5>댓글</h5>
+        <div v-for="comment in comments" :key="comment.id" class="comment">
+          <div>
+            <b>{{comment.name}}</b>
+          </div>
+          <div>
+              작성자 이메일 {{comment.email}}
+          </div>
+          <div>
+              내용{{comment.body}}
+          </div>
+        </div>        
     </div>
   </div>
 </template>
@@ -27,20 +29,37 @@ export default {
   name: 'Detail',
   components: {
   },
-  computed: {
-
-  },
   data(){
     return {
-        title : '',        
-        description : '',
-        commentTitle: '',
-        email:'',
-        commentDescription: ''
+      comments:[]
     }    
+  },
+  mounted: function () {
+    this.requestEvents()
+  },
+  methods: {
+    requestEvents: async function() {            
+      let postNumber = this.$store.state.post.id
+      console.log(this.$store.state.post.id)
+      let response = await this.$http.get('https://jsonplaceholder.typicode.com/posts/'+postNumber+'/comments')      
+      this.comments = response.data
+    },
   }
 }
 </script>
 
 <style lang="scss" scoped>
+.container{
+  text-align: left;
+}
+.title {
+  border-bottom: 1px solid #eaeeef!important;
+  margin-bottom: 1rem;
+}
+.comment{
+  margin-bottom: 1rem;
+}
+p {
+  font-size: 1.2rem;
+}
 </style>

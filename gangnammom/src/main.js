@@ -24,15 +24,11 @@ const store = () => new Vuex.Store({
   },
   mutations: {
     currentPost(state, post) {
-        state.post = post; 
-        console.log('b', state.post.title)
+        state.post = post;
       }
   },
   actions: {
    setPost({commit},post) {
-    for(let data in post){
-      console.log('data',data)
-    }
      commit('currentPost',post)
    }
   }
