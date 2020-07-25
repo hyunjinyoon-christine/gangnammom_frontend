@@ -15,8 +15,7 @@
       infinite-scroll-distance="10">
           <div class="contents" v-for="post in posts" :key="post.id">
             <router-link 
-            :to="{ name: 'Detail', 
-            params: { name: post.title }}">            
+            :to="{ name: 'Detail'}">            
               <div class="card" @click="sendDetail(post)">
                 <div class="thumbnail">
                   <img v-bind:src="post.thumbnail"/>
@@ -96,8 +95,7 @@ export default {
       this.busy = true
       this.requestEvents()
     },
-    sendDetail(post){
-      console.log(this.$store.state.post)
+    sendDetail(post){      
       this.$store.dispatch('setPost',post)
     }
 
