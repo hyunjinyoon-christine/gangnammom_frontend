@@ -14,14 +14,18 @@
       infinite-scroll-disabled="busy" 
       infinite-scroll-distance="10">
           <div class="contents" v-for="post in posts" :key="post.id">
-            <div class="card" @click="sendDetail(post)">
-              <div class="thumbnail">
-                <img v-bind:src="post.thumbnail"/>
+            <router-link 
+            :to="{ name: 'Detail', 
+            params: { name: post.title }}">            
+              <div class="card" @click="sendDetail(post)">
+                <div class="thumbnail">
+                  <img v-bind:src="post.thumbnail"/>
+                </div>
+                <p>{{post.title}}</p>
+                <p>{{post.body}}</p>
+                <p>{{post.userId}}</p>
               </div>
-              <p>{{post.title}}</p>
-              <p>{{post.body}}</p>
-              <p>{{post.userId}}</p>
-            </div>
+            </router-link>
           </div>
       </div>
     </div>
