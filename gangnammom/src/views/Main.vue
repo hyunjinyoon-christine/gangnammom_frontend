@@ -14,7 +14,7 @@
       infinite-scroll-disabled="busy" 
       infinite-scroll-distance="10">
           <div class="contents" v-for="post in posts" :key="post.id">
-            <div class="card">
+            <div class="card" @click="sendDetail(post)">
               <div class="thumbnail">
                 <img v-bind:src="post.thumbnail"/>
               </div>
@@ -92,13 +92,17 @@ export default {
       this.busy = true
       this.requestEvents()
     },
+    sendDetail(post){
+      console.log(this.$store.state.post)
+      this.$store.dispatch('setPost',post)
+    }
 
   }
 }
 </script>
 
 <style lang="scss" scoped>
-@import './styles/module';
+@import '../styles/module';
 @media (min-width: 768px){
     .container{
         max-width: 1040px;
