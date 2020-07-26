@@ -23,7 +23,7 @@
             <router-link 
             :to="{ name: 'Detail'}">            
               <div :class="{card:isGrid}" @click="sendDetail(post)">
-                <div :class="{thumbnail:isGrid} ">
+                <div :class="{thumbnail:isGrid, hide:isList} ">
                   <img v-bind:src="post.thumbnail"/>
                 </div>
                 <p class="title"><b>{{post.title}}</b></p>
@@ -129,6 +129,13 @@ export default {
 
 <style lang="scss" scoped>
 @import '../styles/module';
+a{
+  color: $black;
+  text-decoration: none;
+}
+.hide{
+  display: none;
+}
 .grid{
   .title {
     display: inline-block;
