@@ -84,7 +84,7 @@ export default {
         { text: '리스트형', value: 'list' },
       ],
       showPostNumber: '8',
-      showListType: '그리드형',
+      showListType: 'grid',
       thumbnail:'',
       list: false,
       grid: true
@@ -103,7 +103,6 @@ export default {
       } 
     },
     showListType: function (){
-      console.log('냐냐',this.showListType)
       if(this.showListType == 'grid'){
         this.grid = true
         this.list = false 
