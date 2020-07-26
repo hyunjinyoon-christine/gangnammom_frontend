@@ -15,68 +15,25 @@
       </select>
     </div>
     <div>      
-        <div :class="{grid:isGrid, list:isList}"
-        v-infinite-scroll="loadMore" 
-        infinite-scroll-disabled="busy" 
-        infinite-scroll-distance="10">
-            <div :class="{contents:isGrid}" v-for="post in posts" :key="post.id">
-              <router-link 
-              :to="{ name: 'Detail'}">            
-                <div :class="{card:isGrid}" @click="sendDetail(post)">
-                  <div :class="{thumbnail:isGrid} ">
-                    <img v-bind:src="post.thumbnail"/>
-                  </div>
-                  <p class="title"><b>{{post.title}}</b></p>
-                  <p class="body">{{post.body}}</p>
-                  <p>{{post.userId}}</p>
+      <div :class="{grid:isGrid, list:isList}"
+      v-infinite-scroll="loadMore" 
+      infinite-scroll-disabled="busy" 
+      infinite-scroll-distance="10">
+          <div :class="{contents:isGrid}" v-for="post in posts" :key="post.id">
+            <router-link 
+            :to="{ name: 'Detail'}">            
+              <div :class="{card:isGrid}" @click="sendDetail(post)">
+                <div :class="{thumbnail:isGrid} ">
+                  <img v-bind:src="post.thumbnail"/>
                 </div>
-              </router-link>
-            </div>
-        </div>
-      
-    </div>
-    <!-- <div v-if="this.showPostType == 'list'">
-        <div>
-          <div class="list"
-          v-infinite-scroll="loadMore" 
-          infinite-scroll-disabled="busy" 
-          infinite-scroll-distance="10">
-              <div v-for="post in posts" :key="post.id">
-                <router-link 
-                :to="{ name: 'Detail'}">            
-                  <div @click="sendDetail(post)">                    
-                    <p>{{post.title}}</p>
-                    <p>{{post.body}}</p>
-                    <p>{{post.userId}}</p>
-                  </div>
-                </router-link>
+                <p class="title"><b>{{post.title}}</b></p>
+                <p class="body">{{post.body}}</p>
+                <p>{{post.userId}}</p>
               </div>
+            </router-link>
           </div>
-      </div>
-    </div> -->
-    <!-- <div v-else>
-      <div>
-        <div class="main_item"
-        v-infinite-scroll="loadMore" 
-        infinite-scroll-disabled="busy" 
-        infinite-scroll-distance="10">
-            <div class="contents" v-for="post in posts" :key="post.id">
-              <router-link 
-              :to="{ name: 'Detail'}">            
-                <div class="card" @click="sendDetail(post)">
-                  <div class="thumbnail">
-                    <img v-bind:src="post.thumbnail"/>
-                  </div>
-                  <p class="title">{{post.title}}</p>
-                  <p class="body">{{post.body}}</p>
-                  <p>{{post.userId}}</p>
-                </div>
-              </router-link>
-            </div>
-        </div>
-      </div>
-    </div> -->
-    
+      </div>      
+    </div>    
   </div>
 </template>
 
@@ -144,9 +101,7 @@ export default {
     requestEvents: async function() {
       this.eventUpdateCount += 1      
       let tempStorage = await this.$http.get('https://jsonplaceholder.typicode.com/posts?_page='+ this.eventUpdateCount +'&_limit='+this.postNumber+'&_sort=id&_order=desc')
-      // for(let i = 0; i < tempStorage.data.length; i++){
-      //   tempStorage.data[i].thumbnail = this.getThumbnail()
-      // }
+
       for (let data of tempStorage.data) {        
         data.thumbnail = this.getThumbnail()
         this.posts.push(data)
@@ -185,8 +140,8 @@ export default {
   .body {
     display: inline-block; 
     width: 100%; 
-    white-space: 
-    nowrap; overflow: hidden; 
+    white-space: nowrap; 
+    overflow: hidden; 
     text-overflow: ellipsis;
     white-space: normal; 
     line-height: 1.2;
