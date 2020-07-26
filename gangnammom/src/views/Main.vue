@@ -8,13 +8,13 @@
         </option>
       </select>
       <label for="listType">목록보기 형태</label>
-      <select v-model="showListType">
+      <select v-model="showPostType">
         <option v-for="option in options2" :value="option.value" :key="option.value">
           {{ option.text }}
         </option>
       </select>
     </div>
-    <div v-if="list">
+    <div v-if="this.showPostType == 'list'">
         <div>
           <div class="list"
           v-infinite-scroll="loadMore" 
@@ -33,7 +33,7 @@
           </div>
       </div>
     </div>
-    <div v-if="grid">
+    <div v-else>
       <div>
         <div class="main_item"
         v-infinite-scroll="loadMore" 
@@ -46,8 +46,8 @@
                   <div class="thumbnail">
                     <img v-bind:src="post.thumbnail"/>
                   </div>
-                  <p>{{post.title}}</p>
-                  <p>{{post.body}}</p>
+                  <p class="title">{{post.title}}</p>
+                  <p class="body">{{post.body}}</p>
                   <p>{{post.userId}}</p>
                 </div>
               </router-link>
@@ -84,32 +84,32 @@ export default {
         { text: '리스트형', value: 'list' },
       ],
       showPostNumber: '8',
-      showListType: 'grid',
+      showPostType: 'grid',
       thumbnail:'',
       list: false,
       grid: true
       
     }
   },
+  mounted(){
+    this.showPostNumber = this.$store.state.postNumber
+    this.showPostType = this.$store.state.postType
+    console.log(this.showPostNumber, this.showPostType)
+    
+  },  
   watch: {    
     showPostNumber: function (newVal) {      
       if(newVal > this.postNumber){
         this.postNumber = 8
-        this.requestEvents()
-        this.postNumber = newVal
+        this.requestEvents()        
       } else if(newVal < this.postNumber){
-        this.posts = this.posts.slice(0,8)
-        this.postNumber = newVal
-      } 
+        this.posts = this.posts.slice(0,8)        
+      }
+      this.postNumber = newVal
+      this.$store.dispatch('setNum',newVal)
     },
-    showListType: function (){
-      if(this.showListType == 'grid'){
-        this.grid = true
-        this.list = false 
-      } else {
-        this.list = true
-        this.grid = false
-      }      
+    showPostType: function (){
+      this.$store.dispatch('setType',this.showPostType)      
     }
   },
   methods: {
@@ -152,9 +152,17 @@ export default {
   div {
     div {
       margin-bottom: 1rem;
-      border-bottom: 1px solid #eaeeef!important;
+      border-bottom: 1px solid $gray-200
     }
   }
+}
+
+.title {
+  display: inline-block;
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .thumbnail {
@@ -164,7 +172,7 @@ export default {
   padding: 1rem;
   border-radius: 0;
   border: 0;
-  border-bottom: 1px solid #eaeeef!important;
+  border-bottom: 1px solid $gray-200
 }
 
 .area_select {

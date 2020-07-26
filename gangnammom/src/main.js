@@ -30,16 +30,30 @@ const store = () => new Vuex.Store({
     createPersistedState()
   ],
   state: {
-    post:null    
+    post:null,
+    postType:'grid',
+    postNumber:8
   },
   mutations: {
     currentPost(state, post) {
         state.post = post;
-      }
+    },
+    currentNum(state, num){
+      state.postNumber = num
+    },
+    currentType(state, type){
+      state.postType = type
+    }
   },
   actions: {
     setPost({commit},post) {
       commit('currentPost',post)
+    },
+    setNum({commit},num){
+      commit('currentNum',num)
+    },
+    setType({commit},type){
+      commit('currentType',type)
     }
   }
 })
