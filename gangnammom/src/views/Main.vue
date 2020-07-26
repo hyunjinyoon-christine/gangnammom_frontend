@@ -2,31 +2,28 @@
   <div id="main" class="container">
     <div class="area_select">
       <label for="postNumber">포스트 개수</label>
-      <select v-model="selected">
+      <select v-model="showPostNumber">
         <option v-for="option in options" :value="option.value" :key="option.value">
           {{ option.text }}
         </option>
       </select>
       <label for="listType">목록보기 형태</label>
-      <select v-model="selected2">
+      <select v-model="showListType">
         <option v-for="option in options2" :value="option.value" :key="option.value">
           {{ option.text }}
         </option>
       </select>
     </div>
     <div v-if="list">
-        <div class="main_list" style="background-color: black">
-          <div class="main_item"
+        <div>
+          <div class="list"
           v-infinite-scroll="loadMore" 
           infinite-scroll-disabled="busy" 
           infinite-scroll-distance="10">
-              <div class="contents" v-for="post in posts" :key="post.id">
+              <div v-for="post in posts" :key="post.id">
                 <router-link 
                 :to="{ name: 'Detail'}">            
-                  <div class="card" @click="sendDetail(post)">
-                    <div class="thumbnail">
-                      <img v-bind:src="post.thumbnail"/>
-                    </div>
+                  <div @click="sendDetail(post)">                    
                     <p>{{post.title}}</p>
                     <p>{{post.body}}</p>
                     <p>{{post.userId}}</p>
@@ -37,7 +34,7 @@
       </div>
     </div>
     <div v-if="grid">
-      <div class="main_list">
+      <div>
         <div class="main_item"
         v-infinite-scroll="loadMore" 
         infinite-scroll-disabled="busy" 
@@ -86,8 +83,8 @@ export default {
         { text: '그리드형', value: 'grid' },
         { text: '리스트형', value: 'list' },
       ],
-      selected: '8',
-      selected2: '그리드',
+      showPostNumber: '8',
+      showListType: '그리드형',
       thumbnail:'',
       list: false,
       grid: true
@@ -95,7 +92,7 @@ export default {
     }
   },
   watch: {    
-    question: function (newVal) {      
+    showPostNumber: function (newVal) {      
       if(newVal > this.postNumber){
         this.postNumber = 8
         this.requestEvents()
@@ -105,16 +102,16 @@ export default {
         this.postNumber = newVal
       } 
     },
-    // showListType: function (newVal){
-    //   console.log('냐냐')
-    //   if(newVal === '그리드'){
-    //     this.grid = true
-    //     this.list = false 
-    //   } else {
-    //     this.list = true
-    //     this.grid = false
-    //   }      
-    // }
+    showListType: function (){
+      console.log('냐냐',this.showListType)
+      if(this.showListType == 'grid'){
+        this.grid = true
+        this.list = false 
+      } else {
+        this.list = true
+        this.grid = false
+      }      
+    }
   },
   methods: {
     requestEvents: async function() {
@@ -150,6 +147,16 @@ export default {
 
 <style lang="scss" scoped>
 @import '../styles/module';
+
+.list{
+  text-align: left;
+  div {
+    div {
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #eaeeef!important;
+    }
+  }
+}
 
 .thumbnail {
   display: none;
