@@ -2,30 +2,60 @@
   <div id="main" class="container">
     <div class="area_select">
       <label for="postNumber">포스트 개수</label>
-        <select v-model="selected">
-          <option v-for="option in options" :value="option.value" :key="option.value">
-            {{ option.text }}
-          </option>
-        </select>
+      <select v-model="selected">
+        <option v-for="option in options" :value="option.value" :key="option.value">
+          {{ option.text }}
+        </option>
+      </select>
+      <label for="listType">목록보기 형태</label>
+      <select v-model="selected2">
+        <option v-for="option in options2" :value="option.value" :key="option.value">
+          {{ option.text }}
+        </option>
+      </select>
     </div>
-    <div class="main_list">
-      <div class="main_item"
-      v-infinite-scroll="loadMore" 
-      infinite-scroll-disabled="busy" 
-      infinite-scroll-distance="10">
-          <div class="contents" v-for="post in posts" :key="post.id">
-            <router-link 
-            :to="{ name: 'Detail'}">            
-              <div class="card" @click="sendDetail(post)">
-                <div class="thumbnail">
-                  <img v-bind:src="post.thumbnail"/>
-                </div>
-                <p>{{post.title}}</p>
-                <p>{{post.body}}</p>
-                <p>{{post.userId}}</p>
+    <div v-if="list">
+        <div class="main_list" style="background-color: black">
+          <div class="main_item"
+          v-infinite-scroll="loadMore" 
+          infinite-scroll-disabled="busy" 
+          infinite-scroll-distance="10">
+              <div class="contents" v-for="post in posts" :key="post.id">
+                <router-link 
+                :to="{ name: 'Detail'}">            
+                  <div class="card" @click="sendDetail(post)">
+                    <div class="thumbnail">
+                      <img v-bind:src="post.thumbnail"/>
+                    </div>
+                    <p>{{post.title}}</p>
+                    <p>{{post.body}}</p>
+                    <p>{{post.userId}}</p>
+                  </div>
+                </router-link>
               </div>
-            </router-link>
           </div>
+      </div>
+    </div>
+    <div v-if="grid">
+      <div class="main_list">
+        <div class="main_item"
+        v-infinite-scroll="loadMore" 
+        infinite-scroll-disabled="busy" 
+        infinite-scroll-distance="10">
+            <div class="contents" v-for="post in posts" :key="post.id">
+              <router-link 
+              :to="{ name: 'Detail'}">            
+                <div class="card" @click="sendDetail(post)">
+                  <div class="thumbnail">
+                    <img v-bind:src="post.thumbnail"/>
+                  </div>
+                  <p>{{post.title}}</p>
+                  <p>{{post.body}}</p>
+                  <p>{{post.userId}}</p>
+                </div>
+              </router-link>
+            </div>
+        </div>
       </div>
     </div>
     
@@ -52,8 +82,15 @@ export default {
         { text: '8', value: 8 },
         { text: '16', value: 16 },
       ],
+      options2: [
+        { text: '그리드형', value: 'grid' },
+        { text: '리스트형', value: 'list' },
+      ],
       selected: '8',
-      thumbnail:''
+      selected2: '그리드',
+      thumbnail:'',
+      list: false,
+      grid: true
       
     }
   },
@@ -67,7 +104,17 @@ export default {
         this.posts = this.posts.slice(0,8)
         this.postNumber = newVal
       } 
-    }
+    },
+    // showListType: function (newVal){
+    //   console.log('냐냐')
+    //   if(newVal === '그리드'){
+    //     this.grid = true
+    //     this.list = false 
+    //   } else {
+    //     this.list = true
+    //     this.grid = false
+    //   }      
+    // }
   },
   methods: {
     requestEvents: async function() {
@@ -103,29 +150,49 @@ export default {
 
 <style lang="scss" scoped>
 @import '../styles/module';
+
+.thumbnail {
+  display: none;
+}
+.card {
+  padding: 1rem;
+  border-radius: 0;
+  border: 0;
+  border-bottom: 1px solid #eaeeef!important;
+}
+
+.area_select {
+  display: none;
+}
+
 @media (min-width: 768px){
-    .container{
-        max-width: 1040px;
-    }
-    .contents {
-        flex: 0 0 25%;
-        max-width: 25%;
-        padding: 1rem 0.5rem;
-    }
-    .card {
-        padding: 1rem;
-        border-radius: .5rem; 
-    }
-    .main_item {
-        display: flex;
-        justify-content: center;
-        flex-wrap: wrap;
-    }
-    .area_select{
+  .card {
+      padding: 1rem;
+      border: 1px solid $gray-200;
+      border-radius: 0.5rem;
+  }
+  .container{
+      max-width: 1040px;
+  }
+  .contents {
+      flex: 0 0 25%;
+      max-width: 25%;
+      padding: 1rem 0.5rem;
+  }    
+  .main_item {
       display: flex;
-      justify-content: flex-end;
-    }
-    
+      justify-content: center;
+      flex-wrap: wrap;
+  }
+  .area_select {
+    display: flex;
+    justify-content: flex-end;
+  }
+  .thumbnail {
+    display: block;
+    margin-bottom: 1rem;
+  }
+  
 }
 
 

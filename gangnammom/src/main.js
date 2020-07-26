@@ -6,6 +6,8 @@ let infiniteScroll = require('vue-infinite-scroll');
 import router from './router'
 import Router from 'vue-router'
 import Meta from 'vue-meta';
+import createPersistedState from 'vuex-persistedstate';
+
 
 
 
@@ -21,7 +23,12 @@ Vue.use(Router)
 Vue.use(Meta)
 
 
+
 const store = () => new Vuex.Store({
+
+  plugins: [
+    createPersistedState()
+  ],
   state: {
     post:null    
   },
@@ -31,9 +38,9 @@ const store = () => new Vuex.Store({
       }
   },
   actions: {
-   setPost({commit},post) {
-     commit('currentPost',post)
-   }
+    setPost({commit},post) {
+      commit('currentPost',post)
+    }
   }
 })
 

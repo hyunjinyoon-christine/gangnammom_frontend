@@ -16,7 +16,7 @@
               작성자 이메일 {{comment.email}}
           </div>
           <div>
-              내용{{comment.body}}
+              {{comment.body}}
           </div>
         </div>        
     </div>
@@ -61,11 +61,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '../styles/module';
 .container{
   text-align: left;
 }
 .title {
-  border-bottom: 1px solid #eaeeef!important;
+  border-bottom: 1px solid $gray-200;
   margin-bottom: 1rem;
 }
 .comment{
