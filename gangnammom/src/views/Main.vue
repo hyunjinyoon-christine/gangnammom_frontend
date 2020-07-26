@@ -14,7 +14,28 @@
         </option>
       </select>
     </div>
-    <div v-if="this.showPostType == 'list'">
+    <div>      
+        <div :class="{grid:isGrid, list:isList}"
+        v-infinite-scroll="loadMore" 
+        infinite-scroll-disabled="busy" 
+        infinite-scroll-distance="10">
+            <div :class="{contents:isGrid}" v-for="post in posts" :key="post.id">
+              <router-link 
+              :to="{ name: 'Detail'}">            
+                <div :class="{card:isGrid}" @click="sendDetail(post)">
+                  <div :class="{thumbnail:isGrid} ">
+                    <img v-bind:src="post.thumbnail"/>
+                  </div>
+                  <p class="title"><b>{{post.title}}</b></p>
+                  <p class="body">{{post.body}}</p>
+                  <p>{{post.userId}}</p>
+                </div>
+              </router-link>
+            </div>
+        </div>
+      
+    </div>
+    <!-- <div v-if="this.showPostType == 'list'">
         <div>
           <div class="list"
           v-infinite-scroll="loadMore" 
@@ -32,8 +53,8 @@
               </div>
           </div>
       </div>
-    </div>
-    <div v-else>
+    </div> -->
+    <!-- <div v-else>
       <div>
         <div class="main_item"
         v-infinite-scroll="loadMore" 
@@ -54,7 +75,7 @@
             </div>
         </div>
       </div>
-    </div>
+    </div> -->
     
   </div>
 </template>
@@ -86,8 +107,8 @@ export default {
       showPostNumber: '8',
       showPostType: 'grid',
       thumbnail:'',
-      list: false,
-      grid: true
+      isList: false,
+      isGrid: true
       
     }
   },
@@ -109,7 +130,14 @@ export default {
       this.$store.dispatch('setNum',newVal)
     },
     showPostType: function (){
-      this.$store.dispatch('setType',this.showPostType)      
+      this.$store.dispatch('setType',this.showPostType)
+      if(this.showPostType == 'grid'){
+        this.isGrid = true
+        this.isList = false
+      } else {
+        this.isList = true
+        this.isGrid = false
+      }
     }
   },
   methods: {
@@ -146,80 +174,78 @@ export default {
 
 <style lang="scss" scoped>
 @import '../styles/module';
-
+.grid{
+  .title {
+    display: inline-block;
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .body {
+    display: inline-block; 
+    width: 100%; 
+    white-space: 
+    nowrap; overflow: hidden; 
+    text-overflow: ellipsis;
+    white-space: normal; 
+    line-height: 1.2;
+    height: 3.6em;
+    text-align: left;
+    word-wrap: break-word;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+  }
+  .thumbnail {
+    display: none;
+  }
+  .card {
+    padding: 1rem;
+    border-radius: 0;
+    border: 0;
+    border-bottom: 1px solid $gray-200
+  }
+}
 .list{
   text-align: left;
   div {
     div {
       margin-bottom: 1rem;
-      border-bottom: 1px solid $gray-200
+      border-bottom: 1px solid $gray-200;
     }
-  }
+  }  
 }
-
-.title {
-  display: inline-block;
-  width: 100%;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.body {
-  display: inline-block; 
-  width: 100%; 
-  white-space: 
-  nowrap; overflow: hidden; 
-  text-overflow: ellipsis;
-  white-space: normal; 
-  line-height: 1.2;
-  height: 3.6em;
-  text-align: left;
-  word-wrap: break-word;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-}
-
-.thumbnail {
-  display: none;
-}
-.card {
-  padding: 1rem;
-  border-radius: 0;
-  border: 0;
-  border-bottom: 1px solid $gray-200
-}
-
 .area_select {
   display: none;
 }
 
 @media (min-width: 768px){
-  .card {
+  .container{
+    max-width: 1040px;
+  }
+  .contents {
+    flex: 0 0 25%;
+    max-width: 25%;
+    padding: 1rem 0.5rem;
+  }    
+  .grid {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    .card {
       padding: 1rem;
       border: 1px solid $gray-200;
       border-radius: 0.5rem;
-  }
-  .container{
-      max-width: 1040px;
-  }
-  .contents {
-      flex: 0 0 25%;
-      max-width: 25%;
-      padding: 1rem 0.5rem;
-  }    
-  .main_item {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
+    }
+    .thumbnail {
+      display: block;
+      margin-bottom: 1rem;
+    }
   }
   .area_select {
     display: flex;
     justify-content: flex-end;
-  }
-  .thumbnail {
-    display: block;
-    margin-bottom: 1rem;
   }
   
 }
