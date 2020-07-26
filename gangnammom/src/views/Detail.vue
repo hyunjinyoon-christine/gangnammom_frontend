@@ -53,7 +53,7 @@ export default {
     requestEvents: async function() {            
       let postNumber = this.$store.state.post.id
       console.log(this.$store.state.post.id)
-      let response = await this.$http.get('https://jsonplaceholder.typicode.com/posts/'+postNumber+'/comments')      
+      let response = await this.$http.get('https://jsonplaceholder.typicode.com/posts/'+postNumber+'/comments?_sort=id&_order=desc')      
       this.comments = response.data
     },
   }
